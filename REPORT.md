@@ -125,13 +125,13 @@ The initial baseline CNN — three convolutional blocks trained from scratch on 
 
 The extended pipeline described in the Methods section — anatomy-correct augmentation, class weighting, QWK-based monitoring, and the two comparative architectures — was designed specifically to correct this failure mode, and the same evaluation suite (classification report, confusion matrix, QWK, and Grade 1 recall/precision) was applied identically to both the custom CNN and the transfer-learning model, so that their outputs are directly comparable to the baseline and to each other. At the time of writing, full training runs for both models are still to be executed and their resulting metrics inserted into the table below; the structure is included here as it will be populated:
 
-| Model                                       | 	Accuracy | 	QWK	Grade 1 Recall | Grade 1 Precision |
-|---------------------------------------------|----------|-------------------|-------------------|
-| Baseline CNN (Crop + CLAHE)                 | 	0.379    | 	0.018             | 	0.000             |	
-| Simple CNN  (Resize + Rescale only)         | 0.377    | 0.0364            | 0.0               |
- | Weighted CNN (Crop + CLAHE) | 0.334    | 0.119             | 0.029             |
-| Custom CNN (improved, from scratch)         | 	x	        | x                 | 	x                 |
-| Transfer learning (MobileNetV2, fine-tuned) | 	x        | 	x                 | 	x                 |
+| Model                                       | 	Accuracy    | 	QWK	Grade 1 Recall | Grade 1 Precision |
+|---------------------------------------------|-------------|-------------------|-------------------|
+| Baseline CNN (Crop + CLAHE)                 | 	0.379       | 	0.018             | 	0.000             |	
+| Simple CNN  (Resize + Rescale only)         | 0.377       | 0.0364            | 0.0               |
+ | Weighted CNN (Crop + CLAHE) | 0.334       | 0.119             | 0.029             |
+| Custom CNN (improved, from scratch)         | 	0.1810	      | 0.2324            | 	unavailable       |
+| Transfer learning (MobileNetV2, fine-tuned) | 	unavailable | 	unavailable       | 	unavailable       |
 
 Training curves (accuracy and loss over epochs for both the frozen-backbone and fine-tuning stages) and confusion matrices for each model are produced automatically by the pipeline and are intended to be inserted alongside this table once training is complete, along with the Grad-CAM visualisations described in the Methods section.
 
@@ -140,6 +140,8 @@ Training curves (accuracy and loss over epochs for both the frozen-backbone and 
 The baseline result is a useful negative result; it demonstrates conclusively why accuracy can be a flawed evaluation metric on a dataset with this degree of class imbalance, and why a model can appear to perform reasonably (38% accuracy across five classes, well above the 20% expected from random guessing) while being clinically worthless. This motivates every subsequent design decision in the pipeline, from the introduction of class weighting to the decision to monitor Quadratic Weighted Kappa rather than validation loss during training.
 
 As is also recorded in the result section, there were explorations of a Simple CNN with Resize and Rescale only and a Weighted CNN with Crop and CLAHE, whilst these yielded some successful results and thus were valuable to record, we believed it was possible to find a more sufficient solution.
+
+Due to time constraints, we were unable to complete the full training runs for both models, however, the results that were included, were sitll of good value as they tell the story of a more unstable model and structure that bounces unnaturally as far as accuracy and QWK goes. With proper fine tuning and the usage of transfer-learning, I believe the results would be far greater.
 
 A comparison between the custom CNN to the transfer-learning model was overall insightful about deep learning involving smaller datasets. Due to there being only roughly 9,800 images, it was inevitable for there to be a large imbalance in results. The ability to use a backbone pretrained on a much larger dataset was of high value due to it combatting this issue. The lack of images made it harder for the model to consistently and accurately extract features, making a full adaptation rather difficult. This informed the decision to consider a MobileNetV2 approach.
 
